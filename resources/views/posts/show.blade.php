@@ -1,0 +1,91 @@
+@extends('layouts.main')
+@section('page.title', $post->title)
+
+@section('main.content')
+    <div class="relative py-16 bg-white overflow-hidden">
+        <x-slot name="link">
+            <a href="{{route('post.index')}}">
+                {{__('Назад')}}
+            </a>
+        </x-slot>
+        <div class="hidden lg:block lg:absolute lg:inset-y-0 lg:h-full lg:w-full">
+            <div class="relative h-full text-lg max-w-prose mx-auto" aria-hidden="true">
+                <svg class="absolute top-12 left-full transform translate-x-32" width="404" height="384" fill="none"
+                     viewBox="0 0 404 384">
+                    <defs>
+                        <pattern id="74b3fd99-0a6f-4271-bef2-e80eeafdf357" x="0" y="0" width="20" height="20"
+                                 patternUnits="userSpaceOnUse">
+                            <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor"/>
+                        </pattern>
+                    </defs>
+                    <rect width="404" height="384" fill="url(#74b3fd99-0a6f-4271-bef2-e80eeafdf357)"/>
+                </svg>
+                <svg class="absolute top-1/2 right-full transform -translate-y-1/2 -translate-x-32" width="404"
+                     height="384" fill="none" viewBox="0 0 404 384">
+                    <defs>
+                        <pattern id="f210dbf6-a58d-4871-961e-36d5016a0f49" x="0" y="0" width="20" height="20"
+                                 patternUnits="userSpaceOnUse">
+                            <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor"/>
+                        </pattern>
+                    </defs>
+                    <rect width="404" height="384" fill="url(#f210dbf6-a58d-4871-961e-36d5016a0f49)"/>
+                </svg>
+                <svg class="absolute bottom-12 left-full transform translate-x-32" width="404" height="384" fill="none"
+                     viewBox="0 0 404 384">
+                    <defs>
+                        <pattern id="d3eb07ae-5182-43e6-857d-35c643af9034" x="0" y="0" width="20" height="20"
+                                 patternUnits="userSpaceOnUse">
+                            <rect x="0" y="0" width="4" height="4" class="text-gray-200" fill="currentColor"/>
+                        </pattern>
+                    </defs>
+                    <rect width="404" height="384" fill="url(#d3eb07ae-5182-43e6-857d-35c643af9034)"/>
+                </svg>
+            </div>
+        </div>
+        <div class="relative px-4 sm:px-6 lg:px-8">
+            <div class="text-lg max-w-prose mx-auto">
+                <h1>
+                    <span class="block text-base text-center text-indigo-600 font-semibold tracking-wide uppercase">{{$post->user->name}} в {{$post->category->title}}</span>
+                    <span
+                        class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">{{__($post->title)}}</span>
+                </h1>
+                <div class="flex flex-row items-center space-x-2 justify-end">
+                    @can('update', $post)
+
+                        <x-button-link class="no-underline" href="{{route('post.edit', $post->id)}}">
+                            {{__('Редактировать')}}
+                        </x-button-link>
+                    @endcan
+                    @can('delete', $post)
+                        <x-form action="{{route('post.delete', $post->id)}}" method="post">
+                            @method('delete')
+                            <x-my-button size="sm" type="submit">
+                                {{__('Удалить')}}
+                            </x-my-button>
+                        </x-form>
+                    @endcan
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-6 prose prose-indigo prose-lg text-gray-500 mx-auto">
+        <div class="mb-20">
+            {!! $post->content !!}
+        </div>
+        <div class="text-xs w-full text-right text-gray-400">
+            {{$post->created_at}}
+        </div>
+        <div>
+            @foreach($post->tags as $postTags)
+                <!-- This example requires Tailwind CSS v2.0+ -->
+                <span
+                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+              <svg class="mr-1.5 h-2 w-2 text-indigo-400" fill="currentColor" viewBox="0 0 8 8">
+                <circle cx="4" cy="4" r="3"/>
+              </svg>
+                {{$postTags->title}}
+            </span>
+            @endforeach
+        </div>
+    </div>
+@endsection
